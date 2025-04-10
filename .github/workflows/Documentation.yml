@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   docs:
-    name: ${{ matrix.pkg.name }} Docs
+    name: ${{ matrix.pkg.name }} Documentation
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -39,19 +39,19 @@ jobs:
           julia --project=${{ matrix.pkg.dir }}/docs/ --color=yes -e '
           using Pkg;
           Pkg.Registry.update();
+          # Develop the package for which the docs will be built.
           Pkg.develop(PackageSpec(path="${{ matrix.pkg.dir }}"));
-          if "${{ matrix.pkg.name }}" == "GeneralisedFilters"
-              println("Condition matched: will develop SSMProblems");
-              println("Current directory: $(pwd())");
-              println("SSMProblems directory exists: ", isdir("./SSMProblems"));
-              Pkg.develop(PackageSpec(path="./SSMProblems"));
-              println("After developing SSMProblems, status:");
-              Pkg.status();
-          else
-              println("Condition not matched, skipping SSMProblems development");
-          end;
-          Pkg.instantiate();'
-      - name: Build and deploy
+          Pkg.instantiate();
+          '
+
+      # For GeneralisedFilters only, override SSMProblems to the local version.
+      - name: Override SSMProblems to local version
+        if: ${{ matrix.pkg.name == 'GeneralisedFilters' }}
+        run: |
+          julia --project=${{ matrix.pkg.dir }}/docs --color=yes -e 'using Pkg; Pkg.develop(PackageSpec(path="./SSMProblems")); Pkg.instantiate()'
+
+      # Now build and deploy the docs using the composite action
+      - name: Build and deploy documentation
         uses: TuringLang/actions/DocsDocumenter@main
         with:
           pkg_path: ${{ matrix.pkg.dir }}
