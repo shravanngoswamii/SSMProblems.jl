@@ -39,7 +39,7 @@ jobs:
 
       # Build and deploy using the updated DocsDocumenter action.
       - name: Build and deploy documentation
-        uses: TuringLang/actions/DocsDocumenter@main
+        uses: shravanngoswamii/actions/DocsDocumenter@main
         with:
           pkg_path: ${{ matrix.pkg.dir }}
           doc-path: ${{ matrix.pkg.dir }}/docs
