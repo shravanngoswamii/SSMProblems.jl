@@ -49,7 +49,7 @@ jobs:
       - name: Build and deploy
         uses: shravanngoswamii/actions/DocsDocumenter@main
         with:
-          token: ${{ github.token }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           pkg_path: ${{ matrix.pkg.dir }}
           additional_pkg_paths: ${{ matrix.pkg.additional_paths }}
           doc-path: ${{ matrix.pkg.dir }}/docs
