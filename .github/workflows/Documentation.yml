@@ -47,7 +47,7 @@ jobs:
           end;
           Pkg.instantiate();'
       - name: Build and deploy
-        uses: TuringLang/actions/DocsDocumenter@main
+        uses: shravanngoswamii/actions/DocsDocumenter@main
         with:
           pkg_path: ${{ matrix.pkg.dir }}
           additional_pkg_paths: ${{ matrix.pkg.additional_paths }}
