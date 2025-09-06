@@ -51,7 +51,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          julia --project=${{ matrix.pkg.dir }}/docs/ --color=yes -e '
+          julia --project=${{ matrix.pkg.dir }}/ --color=yes -e '
           using Pkg;
           Pkg.Registry.update();
           Pkg.develop(PackageSpec(path="${{ matrix.pkg.dir }}"));
