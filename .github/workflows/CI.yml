@@ -51,13 +51,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          julia --project=${{ matrix.pkg.dir }} -e '
-            using Pkg;
-            Pkg.develop(PackageSpec(path="./SSMProblems"));
-            if ("${{ matrix.pkg.name }}" == "GeneralisedFilters")
-                Pkg.develop(PackageSpec(path="./GeneralisedFilters"));
-            end
-            Pkg.instantiate();'
+          julia --project=${{ matrix.pkg.dir }}/docs/ --color=yes -e '
+          using Pkg;
+          Pkg.Registry.update();
+          Pkg.develop(PackageSpec(path="${{ matrix.pkg.dir }}"));
+          if "${{ matrix.pkg.name }}" == "GeneralisedFilters"
+              Pkg.develop(PackageSpec(path="./SSMProblems"));
+          end;
+          Pkg.instantiate();'
 
       - name: Run tests
         uses: julia-actions/julia-runtest@v1
