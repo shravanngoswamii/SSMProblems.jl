@@ -54,7 +54,6 @@ jobs:
           julia --project=${{ matrix.pkg.dir }}/ --color=yes -e '
           using Pkg;
           Pkg.Registry.update();
-          Pkg.develop(PackageSpec(path="${{ matrix.pkg.dir }}"));
           if "${{ matrix.pkg.name }}" == "GeneralisedFilters"
               Pkg.develop(PackageSpec(path="./SSMProblems"));
           end;
@@ -93,15 +92,15 @@ jobs:
 
       - name: Install dependencies
         run: |
-          julia --project=GeneralisedFilters -e '
+          julia --project=GeneralisedFilters --color=yes -e '
             using Pkg;
+            Pkg.Registry.update();
             Pkg.develop(PackageSpec(path="./SSMProblems"));
-            Pkg.develop(PackageSpec(path="./GeneralisedFilters"));
             Pkg.instantiate();'
 
       - name: Check GPU code compilation
         run: |
-          julia --project=GeneralisedFilters -e '
+          julia --project=GeneralisedFilters --color=yes -e '
             using Pkg;
             # Add CUDA manually to check for compilation
             Pkg.add("CUDA");
